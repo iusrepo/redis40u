@@ -1,9 +1,7 @@
 %global with_perftools 0
 %global with_redistrib 1
 %global with_pandoc    1
-
-# Tests fail in mock, not in local build.
-%global with_tests %{?_with_tests:1}%{!?_with_tests:0}
+%global with_tests     1
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
@@ -133,6 +131,9 @@ sed -i -e 's|^logfile .*$|logfile /var/log/redis/redis.log|g' redis.conf
 sed -i -e '$ alogfile /var/log/redis/sentinel.log' sentinel.conf
 sed -i -e 's|^dir .*$|dir /var/lib/redis|g' redis.conf
 
+# https://github.com/antirez/redis/issues/2023#issuecomment-56451410
+sed -i -e 's|after 1000|after 5000|' tests/integration/replication-2.tcl
+
 # Module API version safety check
 api=`sed -n -e 's/#define REDISMODULE_APIVER_[0-9][0-9]* //p' src/redismodule.h`
 if test "$api" != "%{redis_modules_abi}"; then
@@ -218,8 +219,8 @@ install -pDm644 %{S:9} %{buildroot}%{rpmmacrodir}/macros.redis
 %check
 %if 0%{?with_tests}
 # https://github.com/antirez/redis/issues/1417 (for "taskset -c 1")
-taskset -c 1 make test ||:
-make test-sentinel ||:
+taskset -c 1 make %{make_flags} test
+make %{make_flags} test-sentinel
 %endif
 
 %pre
@@ -288,6 +289,7 @@ exit 0
 - Port from Fedora to IUS
 - Move man pages to main package
 - Documentation cleanup
+- Enable test suite
 
 * Fri Nov 17 2017 Nathan Scott <nathans@redhat.com> - 4.0.2-2
 - Install the base modules directories, owned by the main package.
