@@ -121,7 +121,6 @@ and removal, status checks, resharding, rebalancing, and other operations.
 
 %prep
 %autosetup -n redis-%{version} -a 10 -p 1
-mv redis-doc-%{doc_commit} doc
 rm -frv deps/jemalloc
 
 # Use system jemalloc library
@@ -143,9 +142,8 @@ if test "$api" != "%{redis_modules_abi}"; then
 fi
 
 %if 0%{?with_pandoc}
-docs=`find doc -name \*.md | sed -e 's|.md$||g'`
-for doc in $docs; do
-    pandoc --standalone --from markdown --to html --output $doc.html $doc.md
+for doc in $(find redis-doc-%{doc_commit} -name \*.md); do
+    pandoc --standalone --from markdown --to html --output ${doc/%md/html} $doc
 done
 %endif
 
@@ -207,14 +205,12 @@ ln -s redis-server.1 %{buildroot}%{_mandir}/man1/redis-sentinel.1
 ln -s redis.conf.5   %{buildroot}%{_mandir}/man5/redis-sentinel.conf.5
 
 # Install markdown and html pages
-doc=$(echo %{buildroot}/%{_docdir}/redis)
-for page in $(find doc -name \*.md | sed -e 's|.md$||g'); do
-    base=$(echo $page | sed -e 's|doc/||g')
-    install -Dpm644 $page.md $doc/$base.md
+pushd redis-doc-%{doc_commit}
+find -name \*.md -exec install -Dpm644 {} %{buildroot}%{_pkgdocdir}/{} \;
 %if 0%{?with_pandoc}
-    install -Dpm644 $page.html $doc/$base.html
+find -name \*.html -exec install -Dpm644 {} %{buildroot}%{_pkgdocdir}/{} \;
 %endif
-done
+popd
 
 # Install rpm macros for redis modules
 install -pDm644 %{S:9} %{buildroot}%{rpmmacrodir}/macros.redis
@@ -248,6 +244,7 @@ exit 0
 
 %files
 %license COPYING
+%exclude %{_pkgdocdir}/*
 %doc 00-RELEASENOTES BUGS CONTRIBUTING MANIFESTO README.md
 %config(noreplace) %{_sysconfdir}/logrotate.d/redis
 %attr(0640, redis, root) %config(noreplace) %{_sysconfdir}/redis.conf
@@ -260,7 +257,6 @@ exit 0
 %if 0%{?with_redistrib}
 %exclude %{_bindir}/redis-trib
 %endif
-%exclude %{_docdir}
 %{_bindir}/redis-*
 %{_libexecdir}/redis-*
 %{_mandir}/man1/redis*
@@ -278,8 +274,7 @@ exit 0
 %{rpmmacrodir}/macros.redis
 
 %files doc
-%docdir %{_docdir}/redis
-%{_docdir}/redis/*
+%{_pkgdocdir}
 
 %if 0%{?with_redistrib}
 %files trib
@@ -292,6 +287,7 @@ exit 0
 * Mon Nov 20 2017 Carl George <carl@george.computer> - 4.0.2-1.ius
 - Port from Fedora to IUS
 - Move man pages to main package
+- Documentation cleanup
 
 * Fri Nov 17 2017 Nathan Scott <nathans@redhat.com> - 4.0.2-2
 - Install the base modules directories, owned by the main package.
