@@ -263,6 +263,8 @@ exit 0
 %exclude %{_docdir}
 %{_bindir}/redis-*
 %{_libexecdir}/redis-*
+%{_mandir}/man1/redis*
+%{_mandir}/man5/redis*
 %{_unitdir}/redis.service
 %{_unitdir}/redis-sentinel.service
 %dir %{_sysconfdir}/systemd/system/redis.service.d
@@ -276,8 +278,6 @@ exit 0
 %{rpmmacrodir}/macros.redis
 
 %files doc
-%{_mandir}/man1/redis*
-%{_mandir}/man5/redis*
 %docdir %{_docdir}/redis
 %{_docdir}/redis/*
 
@@ -291,6 +291,7 @@ exit 0
 %changelog
 * Mon Nov 20 2017 Carl George <carl@george.computer> - 4.0.2-1.ius
 - Port from Fedora to IUS
+- Move man pages to main package
 
 * Fri Nov 17 2017 Nathan Scott <nathans@redhat.com> - 4.0.2-2
 - Install the base modules directories, owned by the main package.
