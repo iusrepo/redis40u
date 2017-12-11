@@ -5,11 +5,11 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 69a5512ae6a4ec77d7b1d0af6aac2224e8e83f95
+%global doc_commit dc402c61da3c015e49eb6fd00e4a0564d122d645
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 Name:              redis40u
-Version:           4.0.2
+Version:           4.0.6
 Release:           1.ius%{?dist}
 Summary:           A persistent key-value database
 License:           BSD
@@ -285,6 +285,9 @@ exit 0
 
 
 %changelog
+* Mon Dec 11 2017 Carl George <carl@george.computer> - 4.0.6-1.ius
+- Latest upstream
+
 * Mon Nov 20 2017 Carl George <carl@george.computer> - 4.0.2-1.ius
 - Port from Fedora to IUS
 - Move man pages to main package
