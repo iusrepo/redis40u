@@ -9,7 +9,7 @@
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 Name:              redis40u
-Version:           4.0.7
+Version:           4.0.8
 Release:           1.ius%{?dist}
 Summary:           A persistent key-value database
 License:           BSD
@@ -63,8 +63,8 @@ Conflicts:         redis < %{version}
 Provides:          redis(modules_abi)%{?_isa} = %{redis_modules_abi}
 
 %description
-Redis is an advanced key-value store. It is often referred to as a data 
-structure server since keys can contain strings, hashes, lists, sets and 
+Redis is an advanced key-value store. It is often referred to as a data
+structure server since keys can contain strings, hashes, lists, sets and
 sorted sets.
 
 You can run atomic operations on these types, like appending to a string;
@@ -285,6 +285,9 @@ exit 0
 
 
 %changelog
+* Fri Feb 02 2018 Carl George <carl@george.computer> - 4.0.8-1.ius
+- Latest upstream
+
 * Wed Jan 24 2018 Carl George <carl@george.computer> - 4.0.7-1.ius
 - Latest upstream
 
