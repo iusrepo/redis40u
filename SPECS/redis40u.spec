@@ -9,7 +9,7 @@
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 Name:              redis40u
-Version:           4.0.10
+Version:           4.0.11
 Release:           1.ius%{?dist}
 Summary:           A persistent key-value database
 License:           BSD
@@ -285,6 +285,9 @@ exit 0
 
 
 %changelog
+* Tue Aug 07 2018 Carl George <carl@george.computer> - 4.0.11-1.ius
+- Latest upstream
+
 * Wed Jun 13 2018 Carl George <carl@george.computer> - 4.0.10-1.ius
 - Latest upstream
 
