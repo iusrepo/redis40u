@@ -10,7 +10,7 @@
 
 Name:              redis40u
 Version:           4.0.14
-Release:           1.ius%{?dist}
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 License:           BSD
 URL:               http://redis.io
@@ -33,6 +33,7 @@ Source10:          https://github.com/antirez/redis-doc/archive/%{doc_commit}/re
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
+BuildRequires:     gcc
 %if 0%{?with_perftools}
 BuildRequires:     gperftools-devel
 %else
