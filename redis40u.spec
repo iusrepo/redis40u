@@ -1,4 +1,3 @@
-%global with_perftools 0
 %global with_redistrib 1
 %global with_pandoc    1
 %global with_tests     1
@@ -34,11 +33,7 @@ Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.pat
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
 BuildRequires:     gcc
-%if 0%{?with_perftools}
-BuildRequires:     gperftools-devel
-%else
 BuildRequires:     jemalloc-devel
-%endif
 %if 0%{?with_tests}
 BuildRequires:     procps-ng
 BuildRequires:     tcl
@@ -149,11 +144,7 @@ for doc in $(find redis-doc-%{doc_commit} -name \*.md); do
 done
 %endif
 
-%if 0%{?with_perftools}
-%global malloc_flags	MALLOC=tcmalloc
-%else
 %global malloc_flags	MALLOC=jemalloc
-%endif
 %global make_flags	DEBUG="" V="echo" LDFLAGS="%{?__global_ldflags}" CFLAGS+="%{optflags} -fPIC" %{malloc_flags} INSTALL="install -p" PREFIX=%{buildroot}%{_prefix}
 
 %build
