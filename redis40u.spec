@@ -9,10 +9,12 @@
 
 Name:              redis40u
 Version:           4.0.14
-Release:           1%{?dist}
+Release:           2%{?dist}
 Summary:           A persistent key-value database
-License:           BSD
-URL:               http://redis.io
+# redis, linenoise, lzf, hiredis are BSD
+# lua is MIT
+License:           BSD and MIT
+URL:               https://redis.io
 Source0:           http://download.redis.io/releases/redis-%{version}.tar.gz
 Source1:           redis.logrotate
 Source2:           redis-sentinel.service
@@ -116,6 +118,9 @@ and removal, status checks, resharding, rebalancing, and other operations.
 %prep
 %autosetup -n redis-%{version} -a 10 -p 1
 rm -frv deps/jemalloc
+
+mv deps/lua/COPYRIGHT    COPYRIGHT-lua
+mv deps/hiredis/COPYING  COPYING-hiredis
 
 # Use system jemalloc library
 sed -i -e '/cd jemalloc && /d' deps/Makefile
@@ -263,6 +268,8 @@ exit 0
 
 %files devel
 %license COPYING
+%license COPYRIGHT-lua
+%license COPYING-hiredis
 %{_includedir}/redismodule.h
 %{_rpmmacrodir}/macros.redis
 
@@ -277,6 +284,9 @@ exit 0
 
 
 %changelog
+* Mon Aug 05 2019 Carl George <carl@george.computer> - 4.0.14-2
+- Handle licenses correctly
+
 * Wed Mar 20 2019 Carl George <carl@george.computer> - 4.0.14-1.ius
 - Latest upstream
 
