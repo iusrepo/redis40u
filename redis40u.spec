@@ -206,7 +206,7 @@ find -name \*.html -exec install -Dpm644 {} %{buildroot}%{_pkgdocdir}/{} \;
 popd
 
 # Install rpm macros for redis modules
-install -pDm644 %{S:9} %{buildroot}%{rpmmacrodir}/macros.redis
+install -pDm644 %{S:9} %{buildroot}%{_rpmmacrodir}/macros.redis
 
 %check
 %if 0%{?with_tests}
@@ -264,7 +264,7 @@ exit 0
 %files devel
 %license COPYING
 %{_includedir}/redismodule.h
-%{rpmmacrodir}/macros.redis
+%{_rpmmacrodir}/macros.redis
 
 %files doc
 %{_pkgdocdir}
